@@ -1,4 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ReginusLTD.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("ReginusContextDbConnection") ?? throw new InvalidOperationException("Connection string 'ReginusContextDbConnection' not found.");
+
+builder.Services.AddDbContext<ReginusContextDb>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<ReginusLTDUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ReginusContextDb>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
